@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { extractPdfText } from "@/app/lib/pdf";
+import { extractText } from "@/app/lib/pdf";
+import { saveDocument } from "@/app/lib/vectorStore";
 
 export async function POST(request: Request) {
   try {
@@ -14,13 +15,17 @@ export async function POST(request: Request) {
       );
     }
 
-    const text = await extractPdfText(file);
+    const result = await extractText(file);
+    console.log("Extracted text length:", result.text.length);
+
+    saveDocument(result.text);
+    console.log("Document saved successfully");
 
     return NextResponse.json({
       success: true,
       filename: file.name,
-      textLength: text.length,
-      preview: text.substring(0, 500),
+      textLength: result.text.length,
+      preview: result.text.substring(0, 500),
     });
   } catch (error) {
     console.error(error);

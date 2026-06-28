@@ -1,6 +1,7 @@
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import FileUpload from "./components/FileUpload";
+import ChatBox from "./components/ChatBox";
 import Features from "./components/Features";
 import Footer from "./components/Footer";
 
@@ -11,8 +12,11 @@ export default function Home() {
 
       <Hero />
 
-      <div className="flex justify-center px-6">
+      <div className="flex flex-col items-center px-6">
         <FileUpload />
+
+        {/* Chat Box */}
+        <ChatBox />
       </div>
 
       <Features />
