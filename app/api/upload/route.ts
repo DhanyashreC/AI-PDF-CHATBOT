@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { extractPdfText } from "@/app/lib/pdf";
 
 export async function POST(request: Request) {
   try {
@@ -8,23 +9,24 @@ export async function POST(request: Request) {
 
     if (!file) {
       return NextResponse.json(
-        { success: false, message: "No file uploaded." },
+        { error: "No PDF uploaded." },
         { status: 400 }
       );
     }
 
+    const text = await extractPdfText(file);
+
     return NextResponse.json({
       success: true,
-      message: "PDF uploaded successfully!",
-      fileName: file.name,
-      fileSize: file.size,
-      fileType: file.type,
+      filename: file.name,
+      textLength: text.length,
+      preview: text.substring(0, 500),
     });
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
-      { success: false, message: "Something went wrong." },
+      { error: "Failed to process PDF." },
       { status: 500 }
     );
   }
